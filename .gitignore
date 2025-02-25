@@ -1,0 +1,20 @@
+# Ignore compiled output files
+*.hex
+*.elf
+*.bin
+
+# Ignore build directories
+*build/
+.arduino/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore Arduino CLI cache files
+.cache/
