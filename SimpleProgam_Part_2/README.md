@@ -39,4 +39,4 @@ I'm not sure if using the CLI tool is worth it yet and at this point I need to d
 That's a wrap for Part 2!
 
 
-[More Buttons!](https://github.com/cjvillar/MicroCompute/blob/main/SimpleProgam_Part_2/FourButtons.png)
+![More Buttons!](https://github.com/cjvillar/MicroCompute/blob/main/SimpleProgam_Part_2/FourButtons.png)
