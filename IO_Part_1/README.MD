@@ -18,5 +18,5 @@ Eventually, I'll need a way to input data into the microcontroller so
 
 With input and output on the screen, I think this is a good stopping point for Part 1. 
 
-![Part1 in action: Arduino with LiquidCrystal_I2C and breadboard ](https://github.com/cjvillar/MicroCompute/blob/main/Part1/Part_1_io.png)
+![Part1 in action: Arduino with LiquidCrystal_I2C and breadboard ](https://github.com/cjvillar/MicroCompute/blob/main/IO_Part_1/Part_1_io.png)
 

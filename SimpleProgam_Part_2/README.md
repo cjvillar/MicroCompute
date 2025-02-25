@@ -39,4 +39,4 @@ I'm not sure if using the CLI tool is worth it yet and at this point I need to d
 That's a wrap for Part 2!
 
 
-<img src="https://github.com/cjvillar/MicroCompute/blob/main/Part2/FourButtons.png" alt="arduino" width="400" height="600"/>
+<img src="https://github.com/cjvillar/MicroCompute/blob/main/SimpleProgam_Part_2/FourButtons.png" alt="arduino" width="400" height="600"/>
