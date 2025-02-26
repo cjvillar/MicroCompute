@@ -25,10 +25,10 @@ It might look like: ***/dev/tty.usbserial-XXXXX**
 Example of compile and load commands:
 ```bash
 
-cd Part2/ComputeSomthing
-
 # build
 arduino-cli compile --fqbn arduino:avr:uno --output-dir ./ComputeSomething/build ./ComputeSomething
+
+cd Part2/ComputeSomthing
 
 # load
 arduino-cli upload --fqbn arduino:avr:uno -p /dev/tty.usbmodem14301

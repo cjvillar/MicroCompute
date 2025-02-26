@@ -1,6 +1,6 @@
 /*
   Home Brew MicroController Computer
-  Convert 8 bits to ASCII ouput
+  Convert 8 bits to ASCII output
 
   Following the Arduino Style Guide for consistency:
   https://docs.arduino.cc/learn/contributions/arduino-writing-style-guide/
@@ -13,7 +13,8 @@
 // Constants and Globals
 // =========================
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-String text = "";  // Stores the text to display
+String text = "";        // Stores the binary input (8 bits at a time)
+String asciiOutput = ""; // Holds ASCII output
 
 // Button Class
 class Button {
@@ -23,23 +24,20 @@ class Button {
   void (*onPress)();
 
  public:
-  // Constructor
   Button(int p, void (*handler)()) : pin(p), lastState(HIGH), onPress(handler) {
     pinMode(pin, INPUT_PULLUP);
   }
 
-  // Method to check and handle button press
   void check() {
     bool currentState = (digitalRead(pin) == LOW);
     if (currentState && lastState == HIGH) {
-      delay(50);               // Debounce
-      if (onPress) onPress();  // Call assigned action
+      delay(50); // Debounce
+      if (onPress) onPress();
       waitForRelease();
     }
     lastState = currentState;
   }
 
-  // Wait for button release with debounce
   void waitForRelease() {
     while (digitalRead(pin) == LOW);
     delay(50);
@@ -47,13 +45,20 @@ class Button {
 };
 
 // Function Declarations
-void addCharacter();
-void clearScreen();
 void addOne();
 void addZero();
+void clearScreen();
+void clearASCII();
+void binToChar();
+void showFullMessage();
 void updateLCD(const String &text);
-void waitForRelease(int pin);
-void handleButtons();
+
+// Create Button Objects (Global Scope)
+Button buttonClear(13, clearScreen); // Clear screen and ASCII 
+Button buttonOne(7, addOne);
+Button buttonZero(2, addZero);
+Button buttonConvert(12, binToChar);   // Convert 8-bit input to ASCII
+Button buttonFullMsg(8, showFullMessage); // Show full ASCII message
 
 // =========================
 // Setup Function
@@ -69,57 +74,54 @@ void setup() {
 // Main Loop
 // =========================
 void loop() {
-  // Create Button Objects
-  Button buttonA(12, binToChar);
-  Button buttonClear(13, clearScreen);
-  Button buttonOne(7, addOne);
-  Button buttonZero(2, addZero);
-
-  buttonA.check();
   buttonClear.check();
   buttonOne.check();
   buttonZero.check();
+  buttonConvert.check();
+  buttonFullMsg.check();
 }
 
 // =========================
 // Button Actions
 // =========================
 
-void clearScreen() {
-  text = "";
-  updateLCD(text);
-}
-
 void addOne() {
-  text += "1";
-  updateLCD(text);
+  if (text.length() < 8) {  //Limit input to 8 bits
+    text += "1";
+    updateLCD(text);
+  }
 }
 
 void addZero() {
-  text += "0";
-  updateLCD(text);
+  if (text.length() < 8) {  //Limit input to 8 bits
+    text += "0";
+    updateLCD(text);
+  }
+}
+
+void clearScreen() {
+  text = "";
+  updateLCD("Cleared");
+  clearASCII(); 
+}
+
+void clearASCII() {
+  asciiOutput = "";
+  updateLCD("ASCII Reset");
 }
 
 void binToChar() {
-  String asciiOutput = "";
+  if (text.length() == 8) {
+    char asciiChar = (char)strtol(text.c_str(), nullptr, 2);
+    asciiOutput += asciiChar;  // Append to full message
 
-  // Ensure input length is a multiple of 8
-  if (text.length() % 8 != 0) {
-    updateLCD("Invalid Input");
-    return;
+    updateLCD(String(asciiChar));  // Show only the current character
+    text = "";  // Reset binary input for the next byte
   }
+}
 
-  for (int i = 0; i < text.length(); i += 8) {
-    String byteStr = text.substring(i, i + 8);
-
-    // strtol() function converts the string in \c nptr to a long value
-    char asciiChar = (char)strtol(byteStr.c_str(), nullptr, 2);
-    asciiOutput += asciiChar;
-  }
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  updateLCD(asciiOutput);
+void showFullMessage() {
+  updateLCD(asciiOutput);  // Display full ASCII message
 }
 
 // =========================
